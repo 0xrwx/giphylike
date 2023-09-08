@@ -7,7 +7,7 @@ Test project to trainee position
 ## Main screen. Search = Cats
 ![Main screen](screenshots/image_2.jpg)
 
-## Main screen. Toggle example
+## Main screen. Custom limits
 ![Main screen](screenshots/image_3.jpg)
 
 ## Gif screen. Zoomed
