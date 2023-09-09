@@ -50,10 +50,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 fun HomeScreen(navController: NavHostController, searchData: String, onSearchDataChange: (String) -> Unit) {
     var gifs by remember { mutableStateOf(listOf<DataObject>()) }
     var isError by remember { mutableStateOf(false) }
-    var lim by remember { mutableStateOf(50) }
-
+    var rating by remember { mutableStateOf("g") }
     var offset by remember { mutableStateOf(0) }
-
     var expanded by remember { mutableStateOf(false) }
 
     val retrofit = Retrofit.Builder()
@@ -64,10 +62,10 @@ fun HomeScreen(navController: NavHostController, searchData: String, onSearchDat
     val retroService = retrofit.create(GiphyApiService::class.java)
 
     // API request
-    LaunchedEffect(searchData, lim) {
+    LaunchedEffect(searchData, rating) {
         try {
             withContext(Dispatchers.IO) {
-                val response = retroService.getGifs(searchTerm = searchData, limit = lim).execute()
+                val response = retroService.getGifs(searchTerm = searchData, rating = rating).execute()
                 if (response.isSuccessful && response.body() != null) {
                     gifs = response.body()!!.res
                 } else {
@@ -112,12 +110,20 @@ fun HomeScreen(navController: NavHostController, searchData: String, onSearchDat
                 onDismissRequest = { expanded = false }
             ) {
                 DropdownMenuItem(
-                    text = { Text("Limit 25") },
-                    onClick = { lim = 25 }
+                    text = { Text("g") },
+                    onClick = { rating = "g" }
                 )
                 DropdownMenuItem(
-                    text = { Text("Limit 50") },
-                    onClick = { lim = 50 }
+                    text = { Text("pg") },
+                    onClick = { rating = "pg" }
+                )
+                DropdownMenuItem(
+                    text = { Text("pg-13") },
+                    onClick = { rating = "pg-13" }
+                )
+                DropdownMenuItem(
+                    text = { Text("r") },
+                    onClick = { rating = "r" }
                 )
             }
         }

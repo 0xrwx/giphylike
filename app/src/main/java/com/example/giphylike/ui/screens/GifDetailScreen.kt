@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Info
@@ -111,6 +112,7 @@ fun GifDetailScreen(gifUrl: String, navController: NavHostController) {
                     .background(colorResource(R.color.softLavender))
                     .aspectRatio(9f/12f)
                     .clickable { isFullSize = !isFullSize }
+                    .verticalScroll(rememberScrollState()),
             )
             Spacer(modifier = Modifier.size(6.dp))
             Text(text = "Url: ", Modifier.padding(start = 15.dp))
