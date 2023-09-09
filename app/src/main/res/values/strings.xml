@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Giphy Like</string>
+    <string name="gif_page_info_button_description">Show more button</string>
+    <string name="gif_page_move_to_home_button_description">Move back button</string>
+    <string name="gif_description">A gif</string>
+    <string name="home_show_more_button_description">Addition options</string>
 </resources>

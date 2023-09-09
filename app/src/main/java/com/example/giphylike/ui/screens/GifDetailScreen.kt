@@ -33,12 +33,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import coil.decode.GifDecoder
+import com.example.giphylike.R
 
 @OptIn(ExperimentalCoilApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -73,7 +75,7 @@ fun GifDetailScreen(gifUrl: String, navController: NavHostController) {
             ) {
                 Icon(
                     Icons.Rounded.ArrowBack,
-                    contentDescription = null
+                    contentDescription = stringResource(R.string.gif_page_move_to_home_button_description)
                 )
             }
             Spacer(modifier = Modifier.size(10.dp))
@@ -82,7 +84,7 @@ fun GifDetailScreen(gifUrl: String, navController: NavHostController) {
             ) {
                 Icon(
                     Icons.Rounded.Info,
-                    contentDescription = null
+                    contentDescription = stringResource(R.string.gif_page_info_button_description)
                 )
             }
         }
@@ -90,7 +92,7 @@ fun GifDetailScreen(gifUrl: String, navController: NavHostController) {
         if (isFullSize) {
             Image(
                 painter = painter,
-                contentDescription = "A gif",
+                contentDescription = stringResource(R.string.gif_description),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .background(Color.Gray)
@@ -102,7 +104,7 @@ fun GifDetailScreen(gifUrl: String, navController: NavHostController) {
         else {
             Image(
                 painter = painter,
-                contentDescription = "A gif",
+                contentDescription = stringResource(R.string.gif_description),
                 contentScale = ContentScale.FillWidth,
                 modifier = Modifier
                     .background(Color.Gray)

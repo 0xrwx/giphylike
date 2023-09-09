@@ -21,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -96,7 +97,7 @@ fun GifItem(gifs: DataObject, navController: NavHostController) {
 
     Image(
         painter = painter,
-        contentDescription = null,
+        contentDescription = stringResource(R.string.gif_description),
         modifier = Modifier
             .size(200.dp)
             .padding(2.dp)
