@@ -33,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -95,7 +96,7 @@ fun GifDetailScreen(gifUrl: String, navController: NavHostController) {
                 contentDescription = stringResource(R.string.gif_description),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .background(Color.Gray)
+                    .background(colorResource(R.color.softLavender))
                     .fillMaxSize()
                     .clickable { isFullSize = !isFullSize }
                     .horizontalScroll(rememberScrollState()),
@@ -107,7 +108,7 @@ fun GifDetailScreen(gifUrl: String, navController: NavHostController) {
                 contentDescription = stringResource(R.string.gif_description),
                 contentScale = ContentScale.FillWidth,
                 modifier = Modifier
-                    .background(Color.Gray)
+                    .background(colorResource(R.color.softLavender))
                     .aspectRatio(9f/12f)
                     .clickable { isFullSize = !isFullSize }
             )

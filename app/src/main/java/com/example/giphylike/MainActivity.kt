@@ -21,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -101,7 +102,7 @@ fun GifItem(gifs: DataObject, navController: NavHostController) {
         modifier = Modifier
             .size(200.dp)
             .padding(2.dp)
-            .background(Color.Gray)
+            .background(colorResource(R.color.softLavender))
             .clickable {
                 val routeToNavigate =
                     GifsScreen.Detail.route.replace("{gifUrl}", Uri.encode(gifs.images.source_smalest.url))
