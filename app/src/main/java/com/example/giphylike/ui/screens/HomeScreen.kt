@@ -43,10 +43,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun HomeScreen(navController: NavHostController, searchData: String, onSearchDataChange: (String) -> Unit) {
     var gifs by remember { mutableStateOf(listOf<DataObject>()) }
     var isError by remember { mutableStateOf(false) }
-    var searchData by remember { mutableStateOf("Anime") }
     var lim by remember { mutableStateOf(25) }
 
     var expanded by remember { mutableStateOf(false) }
@@ -81,7 +80,8 @@ fun HomeScreen(navController: NavHostController) {
     ) {
         TextField(
             value = searchData,
-            onValueChange = { searchData = it },
+//            onValueChange = { searchData = it },
+            onValueChange = onSearchDataChange,
             label = { Text("Search") },
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(

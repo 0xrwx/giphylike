@@ -14,7 +14,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -43,10 +46,14 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    var searchData by remember { mutableStateOf("Anime") }
+
                     val navController = rememberNavController()
                     NavHost(navController = navController, startDestination = GifsScreen.Overview.route) {
                         composable(GifsScreen.Overview.route) {
-                            HomeScreen(navController)
+                            HomeScreen(navController, searchData) { newSearchData ->
+                                searchData = newSearchData
+                            }
                         }
                         composable(GifsScreen.Detail.route) { backStackEntry ->
                             val gifUrl = backStackEntry.arguments?.getString("gifUrl")
