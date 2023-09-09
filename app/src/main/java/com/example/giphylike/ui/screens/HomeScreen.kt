@@ -20,6 +20,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -28,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -48,7 +50,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 fun HomeScreen(navController: NavHostController, searchData: String, onSearchDataChange: (String) -> Unit) {
     var gifs by remember { mutableStateOf(listOf<DataObject>()) }
     var isError by remember { mutableStateOf(false) }
-    var lim by remember { mutableStateOf(25) }
+    var lim by remember { mutableStateOf(50) }
+
+    var offset by remember { mutableStateOf(0) }
 
     var expanded by remember { mutableStateOf(false) }
 
@@ -82,13 +86,17 @@ fun HomeScreen(navController: NavHostController, searchData: String, onSearchDat
     ) {
         TextField(
             value = searchData,
-//            onValueChange = { searchData = it },
             onValueChange = onSearchDataChange,
             label = { Text("Search") },
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Ascii,
                 imeAction = ImeAction.Done
+            ),
+            colors = TextFieldDefaults.textFieldColors(
+                disabledTextColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
             ),
             modifier = Modifier.width(360.dp)
         )
@@ -121,13 +129,32 @@ fun HomeScreen(navController: NavHostController, searchData: String, onSearchDat
             .padding(top = 60.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        itemsIndexed(gifs.chunked(2)) { _, rowGifs ->
+        itemsIndexed(gifs.chunked(2)) { index, rowGifs ->
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 rowGifs.forEach { gif ->
                     GifItem(gif, navController)
+                }
+            }
+            if (index == (gifs.size / 2) - 1) { // the last item achieved
+                LaunchedEffect(offset) {
+                    try {
+                        withContext(Dispatchers.IO) {
+                            val response = retroService.getGifs(searchTerm = searchData, limit = 50, offset = offset).execute()
+                            if (response.isSuccessful && response.body() != null) {
+                                gifs = gifs + response.body()!!.res // Append new gifs to existing list
+                                offset += 50 // Increase the offset for the next batch
+                            } else {
+                                Log.e("API_ERROR", "Response unsuccessful or body is null. Response code: ${response.code()}")
+                                isError = true
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Log.e("API_ERROR", "Exception during API call", e)
+                        isError = true
+                    }
                 }
             }
         }
