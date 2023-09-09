@@ -51,7 +51,8 @@ fun HomeScreen(
     searchData: String,
     ratingInfo: String,
     onSearchDataChange: (String) -> Unit,
-    onRatingInfoChange: (String) -> Unit
+    onRatingInfoChange: (String) -> Unit,
+    backgroundColor: Color
 ) {
     var gifs by remember { mutableStateOf(listOf<DataObject>()) }
     var isError by remember { mutableStateOf(false) }
@@ -144,7 +145,7 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 rowGifs.forEach { gif ->
-                    GifItem(gif, navController)
+                    GifItem(gif, navController, backgroundColor)
                 }
             }
             if (index == (gifs.size / 2) - 1) { // the last item achieved

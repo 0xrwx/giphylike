@@ -58,11 +58,8 @@ dependencies {
     implementation("io.coil-kt:coil-gif:1.3.2")
     implementation("io.coil-kt:coil-compose:1.3.2")
 
-    // ViewModel
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
-
     // coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
 
     // Navigation
     implementation("androidx.navigation:navigation-compose:2.5.3")

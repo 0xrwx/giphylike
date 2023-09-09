@@ -34,7 +34,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -46,7 +45,7 @@ import com.example.giphylike.R
 
 @OptIn(ExperimentalCoilApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun GifDetailScreen(gifUrl: String, navController: NavHostController) {
+fun GifDetailScreen(gifUrl: String, navController: NavHostController, backgroundColor: Color) {
     val context = LocalContext.current
     var isFullSize: Boolean by remember { mutableStateOf(true) }
 
@@ -97,7 +96,7 @@ fun GifDetailScreen(gifUrl: String, navController: NavHostController) {
                 contentDescription = stringResource(R.string.gif_description),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .background(colorResource(R.color.softLavender))
+                    .background(backgroundColor)
                     .fillMaxSize()
                     .clickable { isFullSize = !isFullSize }
                     .horizontalScroll(rememberScrollState()),
@@ -109,7 +108,7 @@ fun GifDetailScreen(gifUrl: String, navController: NavHostController) {
                 contentDescription = stringResource(R.string.gif_description),
                 contentScale = ContentScale.FillWidth,
                 modifier = Modifier
-                    .background(colorResource(R.color.softLavender))
+                    .background(backgroundColor)
                     .aspectRatio(9f/12f)
                     .clickable { isFullSize = !isFullSize }
                     .verticalScroll(rememberScrollState()),

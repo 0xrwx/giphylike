@@ -8,6 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -19,6 +20,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
@@ -49,8 +51,15 @@ class MainActivity : ComponentActivity() {
                 ) {
                     var searchData by remember { mutableStateOf("Anime") }
                     var ratingInfo by remember { mutableStateOf("g") }
-
                     val navController = rememberNavController()
+
+                    val isDarkTheme = isSystemInDarkTheme()
+                    val backgroundColor = if (isDarkTheme) {
+                        colorResource(R.color.graphite)
+                    } else {
+                        colorResource(R.color.softLavender)
+                    }
+
                     NavHost(navController = navController, startDestination = GifsScreen.Overview.route) {
                         composable(GifsScreen.Overview.route) {
                             HomeScreen(
@@ -63,12 +72,13 @@ class MainActivity : ComponentActivity() {
                                 onRatingInfoChange = { newRatingInfo ->
                                     ratingInfo = newRatingInfo
                                 },
+                                backgroundColor
                             )
                         }
                         composable(GifsScreen.Detail.route) { backStackEntry ->
                             val gifUrl = backStackEntry.arguments?.getString("gifUrl")
                             if (gifUrl != null) {
-                                GifDetailScreen(gifUrl, navController)
+                                GifDetailScreen(gifUrl, navController, backgroundColor)
                             }
                         }
                     }
@@ -87,7 +97,7 @@ enum class GifsScreen(val route: String) {
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
-fun GifItem(gifs: DataObject, navController: NavHostController) {
+fun GifItem(gifs: DataObject, navController: NavHostController, backgroundColor: Color) {
     val context = LocalContext.current
 
     val imageLoader = remember {
@@ -104,13 +114,19 @@ fun GifItem(gifs: DataObject, navController: NavHostController) {
         }
     )
 
+//    val isDarkTheme = isSystemInDarkTheme()
+//    val backgroundColor = if (isDarkTheme) {
+//        colorResource(R.color.graphite)
+//    } else {
+//        colorResource(R.color.softLavender)
+//    }
     Image(
         painter = painter,
         contentDescription = stringResource(R.string.gif_description),
         modifier = Modifier
             .size(200.dp)
             .padding(2.dp)
-            .background(colorResource(R.color.softLavender))
+            .background(backgroundColor)
             .clickable {
                 val routeToNavigate =
                     GifsScreen.Detail.route.replace("{gifUrl}", Uri.encode(gifs.images.source_smalest.url))
