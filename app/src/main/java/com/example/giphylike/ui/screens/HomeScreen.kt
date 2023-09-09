@@ -49,13 +49,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 fun HomeScreen(
     navController: NavHostController,
     searchData: String,
-    ratingData: String,
+    ratingInfo: String,
     onSearchDataChange: (String) -> Unit,
-    onRatingDataChange: (String) -> Unit
+    onRatingInfoChange: (String) -> Unit
 ) {
     var gifs by remember { mutableStateOf(listOf<DataObject>()) }
     var isError by remember { mutableStateOf(false) }
-//    var rating by remember { mutableStateOf("g") }
     var offset by remember { mutableStateOf(0) }
     var expanded by remember { mutableStateOf(false) }
 
@@ -67,10 +66,10 @@ fun HomeScreen(
     val retroService = retrofit.create(GiphyApiService::class.java)
 
     // API request
-    LaunchedEffect(searchData, ratingData) {
+    LaunchedEffect(searchData, ratingInfo) {
         try {
             withContext(Dispatchers.IO) {
-                val response = retroService.getGifs(searchTerm = searchData, rating = ratingData).execute()
+                val response = retroService.getGifs(searchTerm = searchData, rating = ratingInfo).execute()
                 if (response.isSuccessful && response.body() != null) {
                     gifs = response.body()!!.res
                 } else {
@@ -115,19 +114,19 @@ fun HomeScreen(
             ) {
                 DropdownMenuItem(
                     text = { Text("g") },
-                    onClick = { onRatingDataChange("g") }
+                    onClick = { onRatingInfoChange("g") }
                 )
                 DropdownMenuItem(
                     text = { Text("pg") },
-                    onClick = { onRatingDataChange("pg") }
+                    onClick = { onRatingInfoChange("pg") }
                 )
                 DropdownMenuItem(
                     text = { Text("pg-13") },
-                    onClick = {onRatingDataChange("pg-13") }
+                    onClick = {onRatingInfoChange("pg-13") }
                 )
                 DropdownMenuItem(
                     text = { Text("r") },
-                    onClick = { onRatingDataChange("r") }
+                    onClick = { onRatingInfoChange("r") }
                 )
             }
         }

@@ -48,7 +48,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     var searchData by remember { mutableStateOf("Anime") }
-                    var ratingData by remember { mutableStateOf("g") }
+                    var ratingInfo by remember { mutableStateOf("g") }
 
                     val navController = rememberNavController()
                     NavHost(navController = navController, startDestination = GifsScreen.Overview.route) {
@@ -56,12 +56,12 @@ class MainActivity : ComponentActivity() {
                             HomeScreen(
                                 navController,
                                 searchData,
-                                ratingData,
+                                ratingInfo,
                                 onSearchDataChange = { newSearchData ->
                                     searchData = newSearchData
                                 },
-                                onRatingDataChange = { newRatingData ->
-                                    ratingData = newRatingData
+                                onRatingInfoChange = { newRatingInfo ->
+                                    ratingInfo = newRatingInfo
                                 },
                             )
                         }
