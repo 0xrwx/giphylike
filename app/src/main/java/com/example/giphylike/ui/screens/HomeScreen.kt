@@ -32,7 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.giphylike.BASE_URL
@@ -47,10 +46,16 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavHostController, searchData: String, onSearchDataChange: (String) -> Unit) {
+fun HomeScreen(
+    navController: NavHostController,
+    searchData: String,
+    ratingData: String,
+    onSearchDataChange: (String) -> Unit,
+    onRatingDataChange: (String) -> Unit
+) {
     var gifs by remember { mutableStateOf(listOf<DataObject>()) }
     var isError by remember { mutableStateOf(false) }
-    var rating by remember { mutableStateOf("g") }
+//    var rating by remember { mutableStateOf("g") }
     var offset by remember { mutableStateOf(0) }
     var expanded by remember { mutableStateOf(false) }
 
@@ -62,10 +67,10 @@ fun HomeScreen(navController: NavHostController, searchData: String, onSearchDat
     val retroService = retrofit.create(GiphyApiService::class.java)
 
     // API request
-    LaunchedEffect(searchData, rating) {
+    LaunchedEffect(searchData, ratingData) {
         try {
             withContext(Dispatchers.IO) {
-                val response = retroService.getGifs(searchTerm = searchData, rating = rating).execute()
+                val response = retroService.getGifs(searchTerm = searchData, rating = ratingData).execute()
                 if (response.isSuccessful && response.body() != null) {
                     gifs = response.body()!!.res
                 } else {
@@ -88,7 +93,6 @@ fun HomeScreen(navController: NavHostController, searchData: String, onSearchDat
             label = { Text("Search") },
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Ascii,
                 imeAction = ImeAction.Done
             ),
             colors = TextFieldDefaults.textFieldColors(
@@ -111,19 +115,19 @@ fun HomeScreen(navController: NavHostController, searchData: String, onSearchDat
             ) {
                 DropdownMenuItem(
                     text = { Text("g") },
-                    onClick = { rating = "g" }
+                    onClick = { onRatingDataChange("g") }
                 )
                 DropdownMenuItem(
                     text = { Text("pg") },
-                    onClick = { rating = "pg" }
+                    onClick = { onRatingDataChange("pg") }
                 )
                 DropdownMenuItem(
                     text = { Text("pg-13") },
-                    onClick = { rating = "pg-13" }
+                    onClick = {onRatingDataChange("pg-13") }
                 )
                 DropdownMenuItem(
                     text = { Text("r") },
-                    onClick = { rating = "r" }
+                    onClick = { onRatingDataChange("r") }
                 )
             }
         }

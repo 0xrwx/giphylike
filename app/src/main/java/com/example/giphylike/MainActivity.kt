@@ -48,13 +48,22 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     var searchData by remember { mutableStateOf("Anime") }
+                    var ratingData by remember { mutableStateOf("g") }
 
                     val navController = rememberNavController()
                     NavHost(navController = navController, startDestination = GifsScreen.Overview.route) {
                         composable(GifsScreen.Overview.route) {
-                            HomeScreen(navController, searchData) { newSearchData ->
-                                searchData = newSearchData
-                            }
+                            HomeScreen(
+                                navController,
+                                searchData,
+                                ratingData,
+                                onSearchDataChange = { newSearchData ->
+                                    searchData = newSearchData
+                                },
+                                onRatingDataChange = { newRatingData ->
+                                    ratingData = newRatingData
+                                },
+                            )
                         }
                         composable(GifsScreen.Detail.route) { backStackEntry ->
                             val gifUrl = backStackEntry.arguments?.getString("gifUrl")
