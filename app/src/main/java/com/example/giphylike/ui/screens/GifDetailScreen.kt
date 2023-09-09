@@ -9,8 +9,8 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -88,7 +88,7 @@ fun GifDetailScreen(gifUrl: String, navController: NavHostController) {
                 )
             }
         }
-        Spacer(modifier = Modifier.size(10.dp))
+        Spacer(modifier = Modifier.size(6.dp))
         if (isFullSize) {
             Image(
                 painter = painter,
@@ -108,22 +108,22 @@ fun GifDetailScreen(gifUrl: String, navController: NavHostController) {
                 contentScale = ContentScale.FillWidth,
                 modifier = Modifier
                     .background(Color.Gray)
-                    .fillMaxWidth()
+                    .aspectRatio(9f/12f)
                     .clickable { isFullSize = !isFullSize }
             )
-        }
-        Spacer(modifier = Modifier.size(20.dp))
-        Text(text = "Url: ", Modifier.padding(start = 15.dp))
-        TextField(
-            value = decodedUrl,
-            onValueChange = {},
-            readOnly = true,
-            shape = RoundedCornerShape(20.dp),
-            colors = TextFieldDefaults.textFieldColors(
-                disabledTextColor = Color.Transparent,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
+            Spacer(modifier = Modifier.size(6.dp))
+            Text(text = "Url: ", Modifier.padding(start = 15.dp))
+            TextField(
+                value = decodedUrl,
+                onValueChange = {},
+                readOnly = true,
+                shape = RoundedCornerShape(20.dp),
+                colors = TextFieldDefaults.textFieldColors(
+                    disabledTextColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                )
             )
-        )
+        }
     }
 }
