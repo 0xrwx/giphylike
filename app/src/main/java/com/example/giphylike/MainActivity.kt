@@ -114,18 +114,12 @@ fun GifItem(gifs: DataObject, navController: NavHostController, backgroundColor:
         }
     )
 
-//    val isDarkTheme = isSystemInDarkTheme()
-//    val backgroundColor = if (isDarkTheme) {
-//        colorResource(R.color.graphite)
-//    } else {
-//        colorResource(R.color.softLavender)
-//    }
     Image(
         painter = painter,
         contentDescription = stringResource(R.string.gif_description),
         modifier = Modifier
             .size(200.dp)
-            .padding(2.dp)
+            .padding(4.dp)
             .background(backgroundColor)
             .clickable {
                 val routeToNavigate =

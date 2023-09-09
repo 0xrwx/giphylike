@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -30,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -83,66 +85,68 @@ fun HomeScreen(
             isError = true
         }
     }
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
+    TextField(
+        value = searchData,
+        onValueChange = onSearchDataChange,
+        label = { Text("Search") },
+        singleLine = true,
+        keyboardOptions = KeyboardOptions.Default.copy(
+            imeAction = ImeAction.Done
+        ),
+        colors = TextFieldDefaults.textFieldColors(
+            disabledTextColor = Color.Transparent,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+        ),
         modifier = Modifier.fillMaxWidth()
-    ) {
-        TextField(
-            value = searchData,
-            onValueChange = onSearchDataChange,
-            label = { Text("Search") },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Done
-            ),
-            colors = TextFieldDefaults.textFieldColors(
-                disabledTextColor = Color.Transparent,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-            ),
-            modifier = Modifier.width(360.dp)
-        )
-        Box(Modifier.width(50.dp)) {
-            IconButton(onClick = { expanded = !expanded }) {
-                Icon(
-                    imageVector = Icons.Default.MoreVert,
-                    contentDescription = stringResource(R.string.home_show_more_button_description)
-                )
-            }
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
-            ) {
-                DropdownMenuItem(
-                    text = { Text("g") },
-                    onClick = { onRatingInfoChange("g") }
-                )
-                DropdownMenuItem(
-                    text = { Text("pg") },
-                    onClick = { onRatingInfoChange("pg") }
-                )
-                DropdownMenuItem(
-                    text = { Text("pg-13") },
-                    onClick = {onRatingInfoChange("pg-13") }
-                )
-                DropdownMenuItem(
-                    text = { Text("r") },
-                    onClick = { onRatingInfoChange("r") }
-                )
-            }
-        }
+    )
 
+    val moreVertWidthPosition = LocalConfiguration.current.screenWidthDp - 43
+
+    Box(
+        contentAlignment = Alignment.TopEnd,
+        modifier = Modifier
+            .width(50.dp)
+            .offset(x = moreVertWidthPosition.dp, y = 5.dp)
+    ) {
+        IconButton(onClick = { expanded = !expanded }) {
+            Icon(
+                imageVector = Icons.Default.MoreVert,
+                contentDescription = stringResource(R.string.home_show_more_button_description)
+            )
+        }
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            DropdownMenuItem(
+                text = { Text("g") },
+                onClick = { onRatingInfoChange("g") }
+            )
+            DropdownMenuItem(
+                text = { Text("pg") },
+                onClick = { onRatingInfoChange("pg") }
+            )
+            DropdownMenuItem(
+                text = { Text("pg-13") },
+                onClick = {onRatingInfoChange("pg-13") }
+            )
+            DropdownMenuItem(
+                text = { Text("r") },
+                onClick = { onRatingInfoChange("r") }
+            )
+        }
     }
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(top = 60.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+//        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         itemsIndexed(gifs.chunked(2)) { index, rowGifs ->
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.Center
             ) {
                 rowGifs.forEach { gif ->
                     GifItem(gif, navController, backgroundColor)

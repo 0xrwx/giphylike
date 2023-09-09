@@ -5,12 +5,10 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -66,8 +64,9 @@ fun GifDetailScreen(gifUrl: String, navController: NavHostController, background
             crossfade(true)
         }
     )
-
-    Column {
+    Column(
+        Modifier.verticalScroll(rememberScrollState())
+    ) {
         Spacer(modifier = Modifier.size(10.dp))
         Row {
             Spacer(modifier = Modifier.size(10.dp))
@@ -79,6 +78,7 @@ fun GifDetailScreen(gifUrl: String, navController: NavHostController, background
                     contentDescription = stringResource(R.string.gif_page_move_to_home_button_description)
                 )
             }
+
             Spacer(modifier = Modifier.size(10.dp))
             OutlinedButton(
                 onClick = { isFullSize = !isFullSize },
@@ -90,6 +90,7 @@ fun GifDetailScreen(gifUrl: String, navController: NavHostController, background
             }
         }
         Spacer(modifier = Modifier.size(6.dp))
+
         if (isFullSize) {
             Image(
                 painter = painter,
@@ -97,9 +98,8 @@ fun GifDetailScreen(gifUrl: String, navController: NavHostController, background
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .background(backgroundColor)
-                    .fillMaxSize()
+                    .aspectRatio(9f / 6f)
                     .clickable { isFullSize = !isFullSize }
-                    .horizontalScroll(rememberScrollState()),
             )
         }
         else {
@@ -109,9 +109,8 @@ fun GifDetailScreen(gifUrl: String, navController: NavHostController, background
                 contentScale = ContentScale.FillWidth,
                 modifier = Modifier
                     .background(backgroundColor)
-                    .aspectRatio(9f/12f)
+                    .aspectRatio(9f / 12f)
                     .clickable { isFullSize = !isFullSize }
-                    .verticalScroll(rememberScrollState()),
             )
             Spacer(modifier = Modifier.size(6.dp))
             Text(text = "Url: ", Modifier.padding(start = 15.dp))
