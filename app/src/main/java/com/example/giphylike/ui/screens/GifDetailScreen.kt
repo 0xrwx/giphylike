@@ -5,10 +5,12 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -98,8 +100,10 @@ fun GifDetailScreen(gifUrl: String, navController: NavHostController, background
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .background(backgroundColor)
-                    .aspectRatio(9f / 6f)
+                    .aspectRatio(9 / 16f)
+                    .height(700.dp)
                     .clickable { isFullSize = !isFullSize }
+                    .horizontalScroll(rememberScrollState())
             )
         }
         else {
@@ -111,6 +115,7 @@ fun GifDetailScreen(gifUrl: String, navController: NavHostController, background
                     .background(backgroundColor)
                     .aspectRatio(9f / 12f)
                     .clickable { isFullSize = !isFullSize }
+                    .verticalScroll(rememberScrollState())
             )
             Spacer(modifier = Modifier.size(6.dp))
             Text(text = "Url: ", Modifier.padding(start = 15.dp))
