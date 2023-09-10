@@ -125,7 +125,11 @@ fun HomeScreen(
         MainDropDownButton(onRatingInfoChange)
     }
 
-    var offset by remember { mutableStateOf(0) }
+    var offset by remember { mutableStateOf(50) }
+
+    LaunchedEffect(searchData) {
+        offset = 50
+    }
 
     LazyColumn(
         modifier = Modifier
