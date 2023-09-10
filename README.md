@@ -2,7 +2,7 @@
 Test project to trainee position
 
 ## Goal
-Making native Android application for searching gifs from giphy, using their API
+Making native Android application for searching gifs from giphy by using their API
 
 ## Technology
 Jetpack Compose, Kotlin, Retrofit, Coil
