@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    var searchData by remember { mutableStateOf("Anime") }
+                    var searchData by remember { mutableStateOf("") }
                     var ratingInfo by remember { mutableStateOf("g") }
                     val navController = rememberNavController()
 
@@ -77,7 +77,7 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(GifsScreen.Detail.route) { backStackEntry ->
                             val gifUrl = backStackEntry.arguments?.getString("gifUrl")
-                            val gifTitle = backStackEntry.arguments?.getString("title")
+                            val gifTitle = backStackEntry.arguments?.getString("gifTitle")
 
                             if (gifUrl != null && gifTitle != null) {
                                 GifDetailScreen(gifUrl, gifTitle, navController, backgroundColor)
@@ -94,7 +94,7 @@ const val BASE_URL = "https://api.giphy.com/v1/"
 
 enum class GifsScreen(val route: String) {
     Overview("overview"),
-    Detail("detail/{title}/{gifUrl}")
+    Detail("detail/{gifTitle}/{gifUrl}")
 }
 
 @OptIn(ExperimentalCoilApi::class)
@@ -110,10 +110,7 @@ fun GifItem(gifs: DataObject, navController: NavHostController, backgroundColor:
 
     val painter = rememberImagePainter(
         data = gifs.images.source_smalest.url,
-        imageLoader = imageLoader,
-        builder = {
-            crossfade(true)
-        }
+        imageLoader = imageLoader
     )
 
     Image(
@@ -126,7 +123,7 @@ fun GifItem(gifs: DataObject, navController: NavHostController, backgroundColor:
             .clickable {
                 val routeToNavigate =
                     GifsScreen.Detail.route
-                        .replace("{title}", gifs.title)
+                        .replace("{gifTitle}", gifs.title)
                         .replace("{gifUrl}", Uri.encode(gifs.images.source_smalest.url))
                 Log.d("NavigationAction", "Navigating to: $routeToNavigate")
                 navController.navigate(routeToNavigate)

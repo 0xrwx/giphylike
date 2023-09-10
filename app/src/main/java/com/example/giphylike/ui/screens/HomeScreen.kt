@@ -66,20 +66,38 @@ fun HomeScreen(
     val retroService = retrofit.create(GiphyApiService::class.java)
 
     // API request
-    LaunchedEffect(searchData, ratingInfo) {
-        try {
-            withContext(Dispatchers.IO) {
-                val response = retroService.getGifs(searchTerm = searchData, rating = ratingInfo).execute()
-                if (response.isSuccessful && response.body() != null) {
-                    gifs = response.body()!!.res
-                } else {
-                    Log.e("API_ERROR", "Response unsuccessful or body is null. Response code: ${response.code()}")
+    if (searchData.isEmpty()) {
+        LaunchedEffect(ratingInfo) {
+            try {
+                withContext(Dispatchers.IO) {
+                    val response = retroService.getTrendingGifs(rating = ratingInfo).execute()
+                    if (response.isSuccessful && response.body() != null) {
+                        gifs = response.body()!!.res
+                    } else {
+                        Log.e("API_ERROR", "Response unsuccessful or body is null. Response code: ${response.code()}")
+                    }
                 }
+            } catch (e: Exception) {
+                Log.e("API_ERROR", "Exception during API call", e)
             }
-        } catch (e: Exception) {
-            Log.e("API_ERROR", "Exception during API call", e)
+        }
+    } else {
+        LaunchedEffect(searchData, ratingInfo) {
+            try {
+                withContext(Dispatchers.IO) {
+                    val response = retroService.getSearchedGifs(searchTerm = searchData, rating = ratingInfo).execute()
+                    if (response.isSuccessful && response.body() != null) {
+                        gifs = response.body()!!.res
+                    } else {
+                        Log.e("API_ERROR", "Response unsuccessful or body is null. Response code: ${response.code()}")
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("API_ERROR", "Exception during API call", e)
+            }
         }
     }
+
     TextField(
         value = searchData,
         onValueChange = onSearchDataChange,
@@ -124,19 +142,37 @@ fun HomeScreen(
                 }
             }
             if (index == (gifs.size / 2) - 1) { // the last item achieved
-                LaunchedEffect(offset) {
-                    try {
-                        withContext(Dispatchers.IO) {
-                            val response = retroService.getGifs(searchTerm = searchData, limit = 50, offset = offset).execute()
-                            if (response.isSuccessful && response.body() != null) {
-                                gifs = gifs + response.body()!!.res // Append new gifs to existing list
-                                offset += 50 // Increase the offset for the next batch
-                            } else {
-                                Log.e("API_ERROR", "Response unsuccessful or body is null. Response code: ${response.code()}")
+                if (searchData.isEmpty()) {
+                    LaunchedEffect(offset) {
+                        try {
+                            withContext(Dispatchers.IO) {
+                                val response = retroService.getTrendingGifs(limit = 50, offset = offset).execute()
+                                if (response.isSuccessful && response.body() != null) {
+                                    gifs = gifs + response.body()!!.res // Append new gifs to existing list
+                                    offset += 50 // Increase the offset for the next batch
+                                } else {
+                                    Log.e("API_ERROR", "Response unsuccessful or body is null. Response code: ${response.code()}")
+                                }
                             }
+                        } catch (e: Exception) {
+                            Log.e("API_ERROR", "Exception during API call", e)
                         }
-                    } catch (e: Exception) {
-                        Log.e("API_ERROR", "Exception during API call", e)
+                    }
+                } else {
+                    LaunchedEffect(offset) {
+                        try {
+                            withContext(Dispatchers.IO) {
+                                val response = retroService.getSearchedGifs(searchTerm = searchData, limit = 50, offset = offset, rating = ratingInfo).execute()
+                                if (response.isSuccessful && response.body() != null) {
+                                    gifs = gifs + response.body()!!.res // Append new gifs to existing list
+                                    offset += 50 // Increase the offset for the next batch
+                                } else {
+                                    Log.e("API_ERROR", "Response unsuccessful or body is null. Response code: ${response.code()}")
+                                }
+                            }
+                        } catch (e: Exception) {
+                            Log.e("API_ERROR", "Exception during API call", e)
+                        }
                     }
                 }
             }

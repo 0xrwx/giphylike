@@ -64,10 +64,7 @@ fun GifDetailScreen(gifUrl: String, gifTitle: String, navController: NavHostCont
 
     val painter = rememberImagePainter(
         data = decodedUrl,
-        imageLoader = imageLoader,
-        builder = {
-            crossfade(true)
-        }
+        imageLoader = imageLoader
     )
     Column(
         Modifier.verticalScroll(rememberScrollState())
@@ -89,8 +86,6 @@ fun GifDetailScreen(gifUrl: String, gifTitle: String, navController: NavHostCont
             ) { isFullSize = !isFullSize }
         }
 
-        GifDetailsScreenTitle(gifTitle)
-
         if (isFullSize) {
             Image(
                 painter = painter,
@@ -105,6 +100,7 @@ fun GifDetailScreen(gifUrl: String, gifTitle: String, navController: NavHostCont
             )
         }
         else {
+            GifDetailsScreenTitle(gifTitle)
             Image(
                 painter = painter,
                 contentDescription = stringResource(R.string.gif_description),
