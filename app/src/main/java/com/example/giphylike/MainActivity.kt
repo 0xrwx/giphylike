@@ -77,8 +77,10 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(GifsScreen.Detail.route) { backStackEntry ->
                             val gifUrl = backStackEntry.arguments?.getString("gifUrl")
-                            if (gifUrl != null) {
-                                GifDetailScreen(gifUrl, navController, backgroundColor)
+                            val gifTitle = backStackEntry.arguments?.getString("title")
+
+                            if (gifUrl != null && gifTitle != null) {
+                                GifDetailScreen(gifUrl, gifTitle, navController, backgroundColor)
                             }
                         }
                     }
@@ -92,7 +94,7 @@ const val BASE_URL = "https://api.giphy.com/v1/"
 
 enum class GifsScreen(val route: String) {
     Overview("overview"),
-    Detail("detail/{gifUrl}")
+    Detail("detail/{title}/{gifUrl}")
 }
 
 @OptIn(ExperimentalCoilApi::class)
@@ -123,7 +125,9 @@ fun GifItem(gifs: DataObject, navController: NavHostController, backgroundColor:
             .background(backgroundColor)
             .clickable {
                 val routeToNavigate =
-                    GifsScreen.Detail.route.replace("{gifUrl}", Uri.encode(gifs.images.source_smalest.url))
+                    GifsScreen.Detail.route
+                        .replace("{title}", gifs.title)
+                        .replace("{gifUrl}", Uri.encode(gifs.images.source_smalest.url))
                 Log.d("NavigationAction", "Navigating to: $routeToNavigate")
                 navController.navigate(routeToNavigate)
             }

@@ -7,14 +7,14 @@ data class DataResult(
 )
 
 data class DataObject(
-    @SerializedName("images") val images: DataImage
+    @SerializedName("images") val images: DataImage,
+    val title: String
 )
 
 data class DataImage(
     @SerializedName("original") val source: DataSource,
     @SerializedName("fixed_height") val source_smaller: DataSource,
     @SerializedName("fixed_height_small") val source_smalest: DataSource,
-    val title: String,
 )
 
 data class DataSource(

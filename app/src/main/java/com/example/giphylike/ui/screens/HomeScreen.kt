@@ -57,9 +57,6 @@ fun HomeScreen(
     backgroundColor: Color
 ) {
     var gifs by remember { mutableStateOf(listOf<DataObject>()) }
-    var isError by remember { mutableStateOf(false) }
-    var offset by remember { mutableStateOf(0) }
-    var expanded by remember { mutableStateOf(false) }
 
     val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
@@ -77,12 +74,10 @@ fun HomeScreen(
                     gifs = response.body()!!.res
                 } else {
                     Log.e("API_ERROR", "Response unsuccessful or body is null. Response code: ${response.code()}")
-                    isError = true
                 }
             }
         } catch (e: Exception) {
             Log.e("API_ERROR", "Exception during API call", e)
-            isError = true
         }
     }
     TextField(
@@ -101,47 +96,23 @@ fun HomeScreen(
         modifier = Modifier.fillMaxWidth()
     )
 
-    val moreVertWidthPosition = LocalConfiguration.current.screenWidthDp - 43
+    val screenWidthDp = LocalConfiguration.current.screenWidthDp
 
     Box(
         contentAlignment = Alignment.TopEnd,
         modifier = Modifier
             .width(50.dp)
-            .offset(x = moreVertWidthPosition.dp, y = 5.dp)
+            .offset(x = (screenWidthDp - 43).dp, y = 5.dp)
     ) {
-        IconButton(onClick = { expanded = !expanded }) {
-            Icon(
-                imageVector = Icons.Default.MoreVert,
-                contentDescription = stringResource(R.string.home_show_more_button_description)
-            )
-        }
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            DropdownMenuItem(
-                text = { Text("g") },
-                onClick = { onRatingInfoChange("g") }
-            )
-            DropdownMenuItem(
-                text = { Text("pg") },
-                onClick = { onRatingInfoChange("pg") }
-            )
-            DropdownMenuItem(
-                text = { Text("pg-13") },
-                onClick = {onRatingInfoChange("pg-13") }
-            )
-            DropdownMenuItem(
-                text = { Text("r") },
-                onClick = { onRatingInfoChange("r") }
-            )
-        }
+        MainDropDownButton(onRatingInfoChange)
     }
+
+    var offset by remember { mutableStateOf(0) }
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(top = 60.dp),
-//        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         itemsIndexed(gifs.chunked(2)) { index, rowGifs ->
             Row(
@@ -162,15 +133,46 @@ fun HomeScreen(
                                 offset += 50 // Increase the offset for the next batch
                             } else {
                                 Log.e("API_ERROR", "Response unsuccessful or body is null. Response code: ${response.code()}")
-                                isError = true
                             }
                         }
                     } catch (e: Exception) {
                         Log.e("API_ERROR", "Exception during API call", e)
-                        isError = true
                     }
                 }
             }
         }
+    }
+}
+
+@Composable
+fun MainDropDownButton(onRatingInfoChange: (String) -> Unit) {
+    var expanded by remember { mutableStateOf(false) }
+
+    IconButton(onClick = { expanded = !expanded }) {
+        Icon(
+            imageVector = Icons.Default.MoreVert,
+            contentDescription = stringResource(R.string.home_show_more_button_description)
+        )
+    }
+    DropdownMenu(
+        expanded = expanded,
+        onDismissRequest = { expanded = false }
+    ) {
+        DropdownMenuItem(
+            text = { Text("g") },
+            onClick = { onRatingInfoChange("g") }
+        )
+        DropdownMenuItem(
+            text = { Text("pg") },
+            onClick = { onRatingInfoChange("pg") }
+        )
+        DropdownMenuItem(
+            text = { Text("pg-13") },
+            onClick = {onRatingInfoChange("pg-13") }
+        )
+        DropdownMenuItem(
+            text = { Text("r") },
+            onClick = { onRatingInfoChange("r") }
+        )
     }
 }

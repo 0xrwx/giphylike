@@ -32,20 +32,23 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import coil.decode.GifDecoder
 import com.example.giphylike.R
+import java.util.Locale
 
 @OptIn(ExperimentalCoilApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun GifDetailScreen(gifUrl: String, navController: NavHostController, backgroundColor: Color) {
+fun GifDetailScreen(gifUrl: String, gifTitle: String, navController: NavHostController, backgroundColor: Color) {
     val context = LocalContext.current
     var isFullSize: Boolean by remember { mutableStateOf(true) }
 
@@ -72,26 +75,21 @@ fun GifDetailScreen(gifUrl: String, navController: NavHostController, background
         Spacer(modifier = Modifier.size(10.dp))
         Row {
             Spacer(modifier = Modifier.size(10.dp))
-            OutlinedButton(
-                onClick = { navController.popBackStack() },
-            ) {
-                Icon(
-                    Icons.Rounded.ArrowBack,
-                    contentDescription = stringResource(R.string.gif_page_move_to_home_button_description)
-                )
-            }
+
+            GifDetailsScreenButton(
+                Icons.Rounded.ArrowBack,
+                stringResource(R.string.gif_page_move_to_home_button_description)
+            ) { navController.popBackStack() }
 
             Spacer(modifier = Modifier.size(10.dp))
-            OutlinedButton(
-                onClick = { isFullSize = !isFullSize },
-            ) {
-                Icon(
-                    Icons.Rounded.Info,
-                    contentDescription = stringResource(R.string.gif_page_info_button_description)
-                )
-            }
+
+            GifDetailsScreenButton(
+                Icons.Rounded.Info,
+                stringResource(R.string.gif_page_info_button_description)
+            ) { isFullSize = !isFullSize }
         }
-        Spacer(modifier = Modifier.size(6.dp))
+
+        GifDetailsScreenTitle(gifTitle)
 
         if (isFullSize) {
             Image(
@@ -117,8 +115,7 @@ fun GifDetailScreen(gifUrl: String, navController: NavHostController, background
                     .clickable { isFullSize = !isFullSize }
                     .verticalScroll(rememberScrollState())
             )
-            Spacer(modifier = Modifier.size(6.dp))
-            Text(text = "Url: ", Modifier.padding(start = 15.dp))
+            Spacer(modifier = Modifier.size(8.dp))
             TextField(
                 value = decodedUrl,
                 onValueChange = {},
@@ -132,4 +129,27 @@ fun GifDetailScreen(gifUrl: String, navController: NavHostController, background
             )
         }
     }
+}
+
+@Composable
+fun GifDetailsScreenButton(
+    icon: ImageVector,
+    contentDescription: String?,
+    onClick: () -> Unit,
+) {
+    OutlinedButton(
+        onClick = onClick,
+    ) {
+        Icon(icon, contentDescription = contentDescription)
+    }
+}
+
+@Composable
+fun GifDetailsScreenTitle(gifTitle: String) {
+    Text(
+        text = gifTitle.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
+            .dropLast(3), // All gifs have GIF sign by the end. I handle it by removing
+        fontSize = 26.sp,
+        modifier = Modifier.padding(start = 10.dp)
+    )
 }
