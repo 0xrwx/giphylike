@@ -77,9 +77,9 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(GifsScreen.Detail.route) { backStackEntry ->
                             val gifUrl = backStackEntry.arguments?.getString("gifUrl")
-                            var gifTitle = backStackEntry.arguments?.getString("gifTitle")
+                            val gifTitle = backStackEntry.arguments?.getString("gifTitle")
                             if (gifUrl != null && gifTitle != null) {
-                                GifDetailScreen(gifUrl, gifTitle, navController, backgroundColor)
+                                GifDetailScreen(gifTitle, gifUrl, navController, backgroundColor)
                             }
                         }
                     }
@@ -120,11 +120,11 @@ fun GifItem(gifs: DataObject, navController: NavHostController, backgroundColor:
             .padding(4.dp)
             .background(backgroundColor)
             .clickable {
-                var gifTitle = gifs.title.ifEmpty { "Gif has no title GIF" }
+                val gifTitle = gifs.title.ifEmpty { "Gif has no title GIF" }
                 val routeToNavigate =
                     GifsScreen.Detail.route
                         .replace("{gifTitle}", gifTitle)
-                        .replace("{gifUrl}", Uri.encode(gifs.images.source_smalest.url))
+                        .replace("{gifUrl}", Uri.encode(gifs.images.source.url))
                 Log.d("NavigationAction", "Navigating to: $routeToNavigate")
                 navController.navigate(routeToNavigate)
             }

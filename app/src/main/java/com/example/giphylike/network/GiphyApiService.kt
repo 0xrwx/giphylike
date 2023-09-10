@@ -1,9 +1,9 @@
 package com.example.giphylike.network
 
 import com.example.giphylike.model.DataResult
+import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
-import retrofit2.Call
 
 interface GiphyApiService {
     @GET("gifs/search")

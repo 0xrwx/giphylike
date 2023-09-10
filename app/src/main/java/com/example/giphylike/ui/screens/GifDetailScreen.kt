@@ -48,7 +48,7 @@ import java.util.Locale
 
 @OptIn(ExperimentalCoilApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun GifDetailScreen(gifUrl: String, gifTitle: String, navController: NavHostController, backgroundColor: Color) {
+fun GifDetailScreen(gifTitle: String, gifUrl: String, navController: NavHostController, backgroundColor: Color) {
     val context = LocalContext.current
     var isFullSize: Boolean by remember { mutableStateOf(true) }
 
