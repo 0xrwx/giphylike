@@ -150,7 +150,6 @@ fun HomeScreen(
             ) {
                 rowGifs.forEach { gif ->
                     GifItem(gif, navController, backgroundColor)
-                    Text(text = "Offset: $offset")
                 }
             }
             if (index == (gifs.size / 2) - 1) { // the last item achieved
