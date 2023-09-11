@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
@@ -126,12 +127,18 @@ fun HomeScreen(
     }
 
     var offset by remember { mutableStateOf(50) }
+    val lazyListState = rememberLazyListState()
 
     LaunchedEffect(searchData) {
+        if (gifs.isNotEmpty()) {
+            lazyListState.animateScrollToItem(0)
+        }
         offset = 50
+        Log.d("Search Data Changed", "searchData: '$searchData'")
     }
 
     LazyColumn(
+        state = lazyListState,
         modifier = Modifier
             .fillMaxSize()
             .padding(top = 60.dp),
@@ -143,6 +150,7 @@ fun HomeScreen(
             ) {
                 rowGifs.forEach { gif ->
                     GifItem(gif, navController, backgroundColor)
+                    Text(text = "Offset: $offset")
                 }
             }
             if (index == (gifs.size / 2) - 1) { // the last item achieved
